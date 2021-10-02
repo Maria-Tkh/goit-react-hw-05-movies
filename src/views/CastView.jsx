@@ -7,11 +7,11 @@ export const CastView = ({ movieId }) => {
   // const { movieId } = useParams();
   const [cast, setCast] = useState([]);
 
-  useEffect(() => {
-    fetchMovieCredits(movieId).then(response => {
-      setCast(response.cast);
-    });
-  }, [movieId]);
+  //   useEffect(() => {
+  //     fetchMovieCredits(movieId).then(response => {
+  //       setCast(response.cast);
+  //     });
+  //   }, [movieId]);
 
   console.log(cast);
   return (
@@ -21,13 +21,13 @@ export const CastView = ({ movieId }) => {
         <ul>
           {cast !== [] &&
             cast.map(actor => (
-              <li key={actor.id}>
+              <li key={actor.cast.id}>
                 <img
-                  src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
+                  src={`https://image.tmdb.org/t/p/w200${actor.cast.profile_path}`}
                   alt={actor.name}
                 />
-                <p>{actor.name}</p>
-                <p>{actor.character}</p>
+                <p>{actor.cast.name}</p>
+                <p>{actor.cast.character}</p>
               </li>
             ))}
         </ul>

@@ -19,6 +19,8 @@ export const MovieDetailsView = () => {
 
   return (
     <>
+      <button>Go back</button>
+      <br />
       {movie && (
         <>
           <img
