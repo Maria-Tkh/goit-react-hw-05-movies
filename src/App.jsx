@@ -10,7 +10,7 @@ export const App = () => {
     <Container>
       <AppBar />
       <Switch>
-        <Route path="/">
+        <Route path="/" exact>
           <HomeView />
         </Route>
 
