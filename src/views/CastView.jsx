@@ -7,11 +7,11 @@ export const CastView = ({ movieId }) => {
   // const { movieId } = useParams();
   const [cast, setCast] = useState([]);
 
-  useEffect(() => {
-    fetchMovieCredits(movieId).then(response => {
-      setCast(response.results);
-    });
-  }, [movieId]);
+  //   useEffect(() => {
+  //     fetchMovieCredits(movieId).then(response => {
+  //       setCast(response.results);
+  //     });
+  //   }, [movieId]);
 
   console.log(cast);
   return (
