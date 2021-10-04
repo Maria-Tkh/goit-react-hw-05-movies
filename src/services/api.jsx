@@ -35,8 +35,8 @@ export function fetchMovieReviews(movieId) {
   );
 }
 
-export function fetchQuery(query) {
+export function fetchQuery(query, page) {
   return fetchWithErrorHandling(
-    `${BASE_URL}search/movie?api_key=${API_KEY}&language=en-US&page=1&include_adult=false&query=${query}`,
+    `${BASE_URL}search/movie?api_key=${API_KEY}&language=en-US&per_page=21&page=${page}&include_adult=false&query=${query}`,
   );
 }

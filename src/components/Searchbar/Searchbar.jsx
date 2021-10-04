@@ -1,8 +1,8 @@
 export const Searchbar = ({ onSearch }) => {
   const handleSearch = e => {
     e.preventDefault();
-    onSearch(e.target.value);
-    console.log(e.target.value);
+    onSearch(e.target.query.value);
+    console.log(e.target.query.value);
     e.target.reset();
   };
   return (
