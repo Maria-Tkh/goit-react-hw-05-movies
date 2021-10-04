@@ -42,14 +42,14 @@ export const MovieDetailsView = () => {
               <Link to={`${url}/cast`}>Cast</Link>
 
               <Route path={`${url}/cast`}>
-                <CastView />
+                <CastView movieId={movieId} />
               </Route>
             </li>
             <li>
               <Link to={`${url}/reviews`}>Reviews</Link>
 
               <Route path={`${url}/reviews`}>
-                <ReviewsView />
+                <ReviewsView movieId={movieId} />
               </Route>
             </li>
           </ul>

@@ -5,16 +5,21 @@ import { fetchQuery } from '../services/api';
 
 export const MoviesView = () => {
   const [query, setQuery] = useState('');
-  const [movieListQuery, setMovieListQuery] = useState(null);
+  const [movieListQuery, setMovieListQuery] = useState([]);
 
   const handleFormSubmit = query => {
     setQuery(query);
   };
 
   useEffect(() => {
-    fetchQuery(query).then(response => {
-      setMovieListQuery(response.results);
-    });
+    query !== null &&
+      fetchQuery(query)
+        .then(response => {
+          setMovieListQuery(response.results);
+        })
+        .catch(error => {
+          console.log(error);
+        });
   }, [query]);
 
   return (

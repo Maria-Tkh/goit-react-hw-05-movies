@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
-// import { useParams } from 'react-router-dom';
 import { fetchMovieCredits } from '../services/api';
-// import { Link, Route, useRouteMatch } from "react-router-dom"
 
 export const CastView = ({ movieId }) => {
-  // const { movieId } = useParams();
   const [cast, setCast] = useState([]);
 
   useEffect(() => {
-    fetchMovieCredits(movieId).then(response => {
-      setCast(response.cast);
-    });
+    fetchMovieCredits(movieId)
+      .then(response => {
+        setCast(response.cast);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }, [movieId]);
 
   console.log(cast);
+  console.log(movieId);
   return (
     <>
       <p>cast</p>
@@ -21,13 +23,13 @@ export const CastView = ({ movieId }) => {
         <ul>
           {cast !== [] &&
             cast.map(actor => (
-              <li key={actor.cast.id}>
+              <li key={actor.id}>
                 <img
-                  src={`https://image.tmdb.org/t/p/w200${actor.cast.profile_path}`}
+                  src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
                   alt={actor.name}
                 />
-                <p>{actor.cast.name}</p>
-                <p>{actor.cast.character}</p>
+                <p>{actor.name}</p>
+                <p>{actor.character}</p>
               </li>
             ))}
         </ul>

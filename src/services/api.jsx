@@ -10,7 +10,7 @@ const BASE_URL = 'https://api.themoviedb.org/3/';
 
 async function fetchWithErrorHandling(url = '', config = {}) {
   const response = await fetch(url, config);
-  return response.ok ? await response.json() : Promise.rejecte(new Error('Not found'));
+  return response.ok ? await response.json() : Promise.reject(new Error('Not found'));
 }
 
 export function fetchPopularMovies() {
@@ -37,6 +37,6 @@ export function fetchMovieReviews(movieId) {
 
 export function fetchQuery(query) {
   return fetchWithErrorHandling(
-    `${BASE_URL}${query}/movie?api_key=${API_KEY}&language=en-US&page=1&include_adult=false`,
+    `${BASE_URL}search/movie?api_key=${API_KEY}&language=en-US&page=1&include_adult=false&query=${query}`,
   );
 }
