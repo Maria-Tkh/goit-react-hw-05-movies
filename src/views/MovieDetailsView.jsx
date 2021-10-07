@@ -1,26 +1,55 @@
-import { useState, useEffect } from 'react';
-import { useParams, useRouteMatch, Link, Route } from 'react-router-dom';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { useParams, useRouteMatch, useLocation, useHistory, Link, Route } from 'react-router-dom';
 import { fetchMovieDetails } from '../services/api';
-import { CastView } from './CastView';
-import { ReviewsView } from './ReviewsView';
+// import  CastView  from './CastView';
+// import  ReviewsView  from './ReviewsView';
+import Spinner from 'components/Loader/Loader';
 
-export const MovieDetailsView = () => {
+const CastView = lazy(() =>
+  import('./CastView.jsx' /* webpackChunkName: "movie-details-cast-view" */),
+);
+const ReviewsView = lazy(() =>
+  import('./ReviewsView.jsx' /* webpackChunkName: "movie-details-cast-reviews-view" */),
+);
+
+export default function MovieDetailsView() {
   const { movieId } = useParams();
-  console.log(movieId);
   const { url } = useRouteMatch();
   const [movie, setMovie] = useState(null);
-  console.log(url);
+  const [requestStatus, setRequestStatus] = useState('idle');
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
-    fetchMovieDetails(movieId).then(setMovie);
+    setRequestStatus('pending');
+    fetchMovieDetails(movieId)
+      .then(response => {
+        setMovie(response);
+        setRequestStatus('resolved');
+      })
+      .catch(error => {
+        setRequestStatus('rejected');
+        console.log(error);
+      });
   }, [movieId]);
 
-  console.log(movie);
+  const onGoBack = () => {
+    history.push(location?.state?.from);
+  };
+
+  console.log('MovieDetailsView history', history);
+
+  // console.log('MovieDetailsView', history.state);
+
+  const isLoading = requestStatus === 'pending';
 
   return (
     <>
-      <button>Go back</button>
+      <button type="button" onClick={onGoBack}>
+        Go back
+      </button>
       <br />
+      {isLoading && <Spinner />}
       {movie && (
         <>
           <img
@@ -39,18 +68,39 @@ export const MovieDetailsView = () => {
           <p>Additional information</p>
           <ul>
             <li>
-              <Link to={`${url}/cast`}>Cast</Link>
-
-              <Route path={`${url}/cast`}>
-                <CastView movieId={movieId} />
-              </Route>
+              <Link
+                to={{
+                  pathname: `${url}/cast`,
+                  state: {
+                    from: location,
+                  },
+                }}
+              >
+                Cast
+              </Link>
+              <Suspense fallback={<Spinner />}>
+                <Route path={`${url}/cast`}>
+                  <CastView movieId={movieId} />
+                </Route>
+              </Suspense>
             </li>
             <li>
-              <Link to={`${url}/reviews`}>Reviews</Link>
-
-              <Route path={`${url}/reviews`}>
-                <ReviewsView movieId={movieId} />
-              </Route>
+              <Link
+                to={{
+                  pathname: `${url}/reviews`,
+                  state: {
+                    from: location,
+                    // from: location.state.from
+                  },
+                }}
+              >
+                Reviews
+              </Link>
+              <Suspense fallback={<Spinner />}>
+                <Route path={`${url}/reviews`}>
+                  <ReviewsView movieId={movieId} />
+                </Route>
+              </Suspense>
             </li>
           </ul>
           <hr />
@@ -58,4 +108,4 @@ export const MovieDetailsView = () => {
       )}
     </>
   );
-};
+}

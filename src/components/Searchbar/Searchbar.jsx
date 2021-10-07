@@ -1,10 +1,11 @@
-export const Searchbar = ({ onSearch }) => {
+export default function Searchbar({ onSearch }) {
   const handleSearch = e => {
     e.preventDefault();
     onSearch(e.target.query.value);
     console.log(e.target.query.value);
     e.target.reset();
   };
+
   return (
     <>
       <form className="SearchForm" onSubmit={handleSearch}>
@@ -15,4 +16,4 @@ export const Searchbar = ({ onSearch }) => {
       </form>
     </>
   );
-};
+}

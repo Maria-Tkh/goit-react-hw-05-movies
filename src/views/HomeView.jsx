@@ -1,43 +1,47 @@
 import { useState, useEffect } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+// import {useRouteMatch } from 'react-router-dom';
 import { fetchPopularMovies } from '../services/api';
-import { PageHeading } from '../components/PageHeading/PageHeading';
+import PageHeading from '../components/PageHeading/PageHeading';
+import Spinner from 'components/Loader/Loader';
+import MovieList from 'components/MovieList/MovieList';
 
-export const HomeView = () => {
-  const match = useRouteMatch();
+export default function HomeView() {
+  // const match = useRouteMatch();
   const [movieList, setMovieList] = useState(null);
-  // const [requestStatus, setRequestStatus] = useState('idle');
-  console.log(match);
+  const [requestStatus, setRequestStatus] = useState('idle');
+  // console.log(match);
 
   useEffect(() => {
-    // setRequestStatus('pending');
+    setRequestStatus('pending');
     fetchPopularMovies()
       .then(response => {
         setMovieList(response.results);
-        // setRequestStatus('resolved');
+        setRequestStatus('resolved');
       })
       .catch(error => {
-        // setRequestStatus('rejected');
+        setRequestStatus('rejected');
         console.log(error);
       });
   }, []);
 
-  // const isLoading = requestStatus === 'pending';
-  // const showMovieList = movieList.length > 0 && !isLoading;
+  const isLoading = requestStatus === 'pending';
 
   return (
     <>
       <PageHeading text="Trending today" />
-
-      {movieList && (
-        <ul>
-          {movieList.map(movie => (
-            <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      {isLoading && <Spinner />}
+      {
+        movieList && <MovieList movieList={movieList} />
+        // (
+        // <ul>
+        //   {movieList.map(movie => (
+        //     <li key={movie.id}>
+        //       <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+        //     </li>
+        //   ))}
+        // </ul>
+        // )
+      }
     </>
   );
-};
+}

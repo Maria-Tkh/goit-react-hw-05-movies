@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { fetchMovieCredits } from '../services/api';
+import { useLocation, useHistory } from 'react-router-dom';
 
-export const CastView = ({ movieId }) => {
+export default function CastView({ movieId }) {
   const [cast, setCast] = useState([]);
+  const history = useHistory();
+  const location = useLocation();
+  console.log('Cast location', location);
+  console.log('Cast history', history);
 
   useEffect(() => {
     fetchMovieCredits(movieId)
@@ -14,26 +19,18 @@ export const CastView = ({ movieId }) => {
       });
   }, [movieId]);
 
-  console.log(cast);
-  console.log(movieId);
   return (
     <>
-      <p>cast</p>
-      <>
-        <ul>
-          {cast !== [] &&
-            cast.map(actor => (
-              <li key={actor.id}>
-                <img
-                  src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
-                  alt={actor.name}
-                />
-                <p>{actor.name}</p>
-                <p>{actor.character}</p>
-              </li>
-            ))}
-        </ul>
-      </>
+      <ul>
+        {cast !== [] &&
+          cast.map(actor => (
+            <li key={actor.id}>
+              <img src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`} alt={actor.name} />
+              <p>{actor.name}</p>
+              <p>{actor.character}</p>
+            </li>
+          ))}
+      </ul>
     </>
   );
-};
+}

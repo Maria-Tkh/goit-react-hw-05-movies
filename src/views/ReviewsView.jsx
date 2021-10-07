@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { fetchMovieReviews } from '../services/api';
+import { NotFoundReviews } from './NotFoundInfoView';
 
-export const ReviewsView = ({ movieId }) => {
+export default function ReviewsView({ movieId }) {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -14,22 +15,19 @@ export const ReviewsView = ({ movieId }) => {
       });
   }, [movieId]);
 
-  console.log(reviews);
-
   return (
     <>
-      <p>Reviews</p>
-      <>
-        <ul>
-          {reviews !== [] &&
-            reviews.map(review => (
-              <li key={review.id}>
-                <h3>Author: {review.author}</h3>
-                <p>{review.content}</p>
-              </li>
-            ))}
-        </ul>
-      </>
+      {reviews.length === 0 && <NotFoundReviews />}
+
+      <ul>
+        {reviews !== [] &&
+          reviews.map(review => (
+            <li key={review.id}>
+              <h3>Author: {review.author}</h3>
+              <p>{review.content}</p>
+            </li>
+          ))}
+      </ul>
     </>
   );
-};
+}
