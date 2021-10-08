@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+// import queryString from 'query-string';
 import Searchbar from 'components/Searchbar/Searchbar';
 import Spinner from 'components/Loader/Loader';
 import MovieList from 'components/MovieList/MovieList';
@@ -17,14 +18,16 @@ export default function MoviesView() {
     setQuery(query);
   };
 
+  const changeQuery = new URLSearchParams(location.search).get('query') ?? '';
+
+  console.log('changeQuery', changeQuery);
+
   // const onChangeQuery = () => {
   //   history.push({
   //     ...location,
   //     search: `query=${query}`,
   //   });
   // }
-
-  const changeQuery = new URLSearchParams(location.search).get('query') ?? '';
 
   useEffect(() => {
     if (location.search !== '') {
@@ -37,7 +40,10 @@ export default function MoviesView() {
     if (query === '') {
       return;
     }
-    query !== null && setRequestStatus('pending');
+    if (changeQuery !== null) {
+      setQuery(changeQuery);
+    }
+    setRequestStatus('pending');
     fetchQuery(query)
       .then(response => {
         setMovieList(response.results);
@@ -47,7 +53,7 @@ export default function MoviesView() {
         setRequestStatus('rejected');
         console.log(error);
       });
-  }, [query]);
+  }, [query, changeQuery]);
 
   const isLoading = requestStatus === 'pending';
   const loaded = requestStatus === 'resolved';
