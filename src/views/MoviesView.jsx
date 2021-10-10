@@ -16,13 +16,13 @@ export default function MoviesView() {
 
   const handleFormSubmit = query => {
     setQuery(query);
+    history.push({ ...location, search: `query=${query}` });
+    // onChangeQuery();
   };
 
   const changeQuery = new URLSearchParams(location.search).get('query') ?? '';
 
-  console.log('changeQuery', changeQuery);
-
-  // const onChangeQuery = () => {
+  // function onChangeQuery() {
   //   history.push({
   //     ...location,
   //     search: `query=${query}`,
@@ -30,20 +30,17 @@ export default function MoviesView() {
   // }
 
   useEffect(() => {
-    if (location.search !== '') {
+    if (!changeQuery) {
       return;
     }
-    history.push({ ...location, search: `query=${query}` });
-  }, [history, location, query]);
+    setQuery(changeQuery);
+  }, [changeQuery]);
 
   useEffect(() => {
     if (query === '') {
       return;
     }
-    if (changeQuery !== null) {
-      setQuery(changeQuery);
-    }
-    setRequestStatus('pending');
+    query !== null && setRequestStatus('pending');
     fetchQuery(query)
       .then(response => {
         setMovieList(response.results);
@@ -53,7 +50,7 @@ export default function MoviesView() {
         setRequestStatus('rejected');
         console.log(error);
       });
-  }, [query, changeQuery]);
+  }, [query]);
 
   const isLoading = requestStatus === 'pending';
   const loaded = requestStatus === 'resolved';
@@ -63,18 +60,7 @@ export default function MoviesView() {
       <Searchbar onSearch={handleFormSubmit} value={changeQuery} />
       {isLoading && <Spinner />}
       {loaded && movieList.length === 0 && <NotFoundMovies />}
-      {
-        movieList && <MovieList movieList={movieList} />
-        // (
-        // <ul>
-        //   {movieList.map(movie => (
-        //     <li key={movie.id}>
-        //       <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
-        //     </li>
-        //   ))}
-        // </ul>
-        // )
-      }
+      {movieList && <MovieList movieList={movieList} />}
     </>
   );
 }

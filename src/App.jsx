@@ -3,10 +3,6 @@ import { lazy, Suspense } from 'react';
 import AppBar from './components/AppBar/AppBar';
 import Container from './components/Container/Container';
 import Spinner from 'components/Loader/Loader';
-// import HomeView  from 'views/HomeView';
-// import  MoviesView  from 'views/MoviesView';
-// import  NotFoundView  from './views/NotFoundView';
-// import  MovieDetailsView  from './views/MovieDetailsView';
 
 const HomeView = lazy(() => import('./views/HomeView.jsx' /* webpackChunkName: "home-view" */));
 const MoviesView = lazy(() =>

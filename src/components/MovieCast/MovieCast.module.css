@@ -1,0 +1,17 @@
+.castList {
+  display: block;
+  list-style-type: none;
+}
+
+.actorCard {
+  margin-bottom: 50px;
+}
+
+.actorName {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.character {
+  margin-top: 10px;
+}

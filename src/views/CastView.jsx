@@ -1,36 +1,37 @@
 import { useState, useEffect } from 'react';
 import { fetchMovieCredits } from '../services/api';
-import { useLocation, useHistory } from 'react-router-dom';
+import MovieCast from 'components/MovieCast/MovieCast';
+import { NotFoundCast } from './NotFoundInfoView';
+import Spinner from 'components/Loader/Loader';
+import PropTypes from 'prop-types';
 
 export default function CastView({ movieId }) {
   const [cast, setCast] = useState([]);
-  const history = useHistory();
-  const location = useLocation();
-  console.log('Cast location', location);
-  console.log('Cast history', history);
+  const [requestStatus, setRequestStatus] = useState('idle');
 
   useEffect(() => {
+    setRequestStatus('pending');
     fetchMovieCredits(movieId)
       .then(response => {
         setCast(response.cast);
+        setRequestStatus('resolved');
       })
       .catch(error => {
+        setRequestStatus('rejected');
         console.log(error);
       });
   }, [movieId]);
 
+  const isLoading = requestStatus === 'pending';
+
   return (
     <>
-      <ul>
-        {cast !== [] &&
-          cast.map(actor => (
-            <li key={actor.id}>
-              <img src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`} alt={actor.name} />
-              <p>{actor.name}</p>
-              <p>{actor.character}</p>
-            </li>
-          ))}
-      </ul>
+      {isLoading && <Spinner />}
+      {cast.length !== 0 ? <MovieCast cast={cast} /> : <NotFoundCast />}
     </>
   );
 }
+
+CastView.propTypes = {
+  movieId: PropTypes.string.isRequired,
+};

@@ -1,12 +1,5 @@
-// import axios from 'axios';
-
 const API_KEY = '022c4c0fe946d80e6f1ac32e6f44ebf0';
 const BASE_URL = 'https://api.themoviedb.org/3/';
-
-// axios.defaults.baseURL = BASE_URL;
-// axios.defaults.params = {
-//     key: API_KEY,
-// };
 
 async function fetchWithErrorHandling(url = '', config = {}) {
   const response = await fetch(url, config);

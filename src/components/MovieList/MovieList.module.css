@@ -1,0 +1,17 @@
+.list {
+  display: block;
+  list-style-type: none;
+  text-decoration: none;
+  padding: 12px;
+  font-weight: 400;
+  color: #2a363b;
+  font-size: 18px;
+}
+
+.movie {
+  text-decoration: none;
+}
+
+.movie:hover {
+  color: #2196f3;
+}

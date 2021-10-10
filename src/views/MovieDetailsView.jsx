@@ -1,8 +1,8 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams, useRouteMatch, useLocation, useHistory, Link, Route } from 'react-router-dom';
+import { useParams, useRouteMatch, useLocation, useHistory, Route } from 'react-router-dom';
 import { fetchMovieDetails } from '../services/api';
-// import  CastView  from './CastView';
-// import  ReviewsView  from './ReviewsView';
+import MovieDetails from 'components/MovieDetails/MovieDetails';
+import GoBackButton from 'components/GoBackButton/GoBackButton';
 import Spinner from 'components/Loader/Loader';
 
 const CastView = lazy(() =>
@@ -37,75 +37,26 @@ export default function MovieDetailsView() {
     history.push(location?.state?.from);
   };
 
-  console.log('MovieDetailsView history', history);
-
-  // console.log('MovieDetailsView', history.state);
-
   const isLoading = requestStatus === 'pending';
 
   return (
     <>
-      <button type="button" onClick={onGoBack}>
-        Go back
-      </button>
+      {<GoBackButton onClick={onGoBack} />}
       <br />
       {isLoading && <Spinner />}
-      {movie && (
-        <>
-          <img
-            src={`https://image.tmdb.org/t/p/w300${movie.backdrop_path}`}
-            alt={movie.original_title}
-          />
-          <h2>
-            {movie.original_title} ({movie.release_date.substring(0, 4)})
-          </h2>
-          <p>User Score: {movie.vote_average * 10}%</p>
-          <h3>Overview</h3>
-          <p>{movie.overview}</p>
-          <h3>Genres</h3>
-          <p>{movie.genres.map(genre => genre.name).join(', ')}</p>
-          <hr />
-          <p>Additional information</p>
-          <ul>
-            <li>
-              <Link
-                to={{
-                  pathname: `${url}/cast`,
-                  state: {
-                    from: location,
-                  },
-                }}
-              >
-                Cast
-              </Link>
-              <Suspense fallback={<Spinner />}>
-                <Route path={`${url}/cast`}>
-                  <CastView movieId={movieId} />
-                </Route>
-              </Suspense>
-            </li>
-            <li>
-              <Link
-                to={{
-                  pathname: `${url}/reviews`,
-                  state: {
-                    from: location,
-                    // from: location.state.from
-                  },
-                }}
-              >
-                Reviews
-              </Link>
-              <Suspense fallback={<Spinner />}>
-                <Route path={`${url}/reviews`}>
-                  <ReviewsView movieId={movieId} />
-                </Route>
-              </Suspense>
-            </li>
-          </ul>
-          <hr />
-        </>
-      )}
+      {movie && <MovieDetails movie={movie} />}
+
+      <Suspense fallback={<Spinner />}>
+        <Route path={`${url}/cast`}>
+          <CastView movieId={movieId} />
+        </Route>
+      </Suspense>
+
+      <Suspense fallback={<Spinner />}>
+        <Route path={`${url}/reviews`}>
+          <ReviewsView movieId={movieId} />
+        </Route>
+      </Suspense>
     </>
   );
 }

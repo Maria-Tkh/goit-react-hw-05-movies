@@ -1,0 +1,43 @@
+.movieWrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.posterWrapper {
+  padding-left: 40px;
+}
+
+.movieInfo {
+  display: block;
+  margin-left: 20px;
+}
+
+.movieTitle {
+  margin-top: 0px;
+}
+
+.addInfo {
+  padding-left: 40px;
+}
+
+.linkList {
+  display: block;
+  list-style-type: none;
+  text-decoration: none;
+  padding-left: 40px;
+}
+
+.link {
+  font-weight: 400;
+  color: #2a363b;
+  font-size: 18px;
+}
+
+.link:hover {
+  color: #2196f3;
+}
+
+.activeLink {
+  /* composes: link; */
+  color: #2196f3;
+}
