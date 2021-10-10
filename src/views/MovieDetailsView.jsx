@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams, useRouteMatch, useLocation, useHistory, Route } from 'react-router-dom';
+import { useParams, useRouteMatch, useLocation, useHistory, Route, Switch } from 'react-router-dom';
 import { fetchMovieDetails } from '../services/api';
 import MovieDetails from 'components/MovieDetails/MovieDetails';
 import GoBackButton from 'components/GoBackButton/GoBackButton';
@@ -47,15 +47,15 @@ export default function MovieDetailsView() {
       {movie && <MovieDetails movie={movie} />}
 
       <Suspense fallback={<Spinner />}>
-        <Route path={`${url}/cast`}>
-          <CastView movieId={movieId} />
-        </Route>
-      </Suspense>
+        <Switch>
+          <Route path={`${url}/cast`}>
+            <CastView movieId={movieId} />
+          </Route>
 
-      <Suspense fallback={<Spinner />}>
-        <Route path={`${url}/reviews`}>
-          <ReviewsView movieId={movieId} />
-        </Route>
+          <Route path={`${url}/reviews`}>
+            <ReviewsView movieId={movieId} />
+          </Route>
+        </Switch>
       </Suspense>
     </>
   );
